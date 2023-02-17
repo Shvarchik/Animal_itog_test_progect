@@ -19,11 +19,8 @@ public class PetController {
     }
 
     public void createPet (PetType type){
-        try{
-            petRepository.Create(petCreator.createPet(type, view.getName(), view.getBirthday()));
-        } catch (UncorrectDataException e) {
-            System.out.println(e.getMessage());
-        }
+        
+        petRepository.Create(petCreator.createPet(type, view.getName(), view.getBirthday()));    
     }
 
     public List <Pet> getAllPet (){

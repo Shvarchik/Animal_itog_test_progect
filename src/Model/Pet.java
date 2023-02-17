@@ -46,7 +46,7 @@ public abstract class Pet {
     public String commandsToString (){
         StringBuilder sb = new StringBuilder();
         if (commands.size() != 0){
-            sb.append ("команды: ");
+            sb.append ("команды:\n");
             for (String command : commands) {
                 sb.append(command);
                 sb.append ("\n");
@@ -66,7 +66,7 @@ public abstract class Pet {
     public String toString() {
         
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("имя; %s, дата рождения; %s", name, getBirthday()));
+        sb.append(String.format("имя: %s, дата рождения: %s", name, getBirthday()));
         if (commands.size() != 0){
             sb.append (", команды: ");
             for (String command : commands) {
