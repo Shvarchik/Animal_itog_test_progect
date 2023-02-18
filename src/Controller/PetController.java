@@ -19,7 +19,6 @@ public class PetController {
     }
 
     public void createPet (PetType type){
-        
         petRepository.Create(petCreator.createPet(type, view.getName(), view.getBirthday()));    
     }
 
@@ -32,9 +31,12 @@ public class PetController {
         Pet pet = petRepository.GetById(id);
         if (pet.getCommands().contains(command))
             return false;
-         else 
+        if (! pet.getPossibleCommands().contains(command))
+            throw new UncorrectDataException("невыполнимая команда");
+        else {
             pet.train(command);
             return true;
+        }
     }
 
     public  void getCommands (int id){

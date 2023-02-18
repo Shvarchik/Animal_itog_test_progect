@@ -1,7 +1,6 @@
 package UI;
 
 import java.util.Scanner;
-
 import Controller.*;
 import Exceptions.UncorrectDataException;
 
@@ -28,6 +27,7 @@ public class ConsoleMenu {
                 String key = in.next();
                 switch (key) {
                     case "1":
+                        System.out.println("Ферма:");
                         petController.showFarm();
                         break;
                     case "2":
@@ -52,13 +52,14 @@ public class ConsoleMenu {
                         petController.showFarm();
                         id = menuChoicePet(in);
                         if (id != 0)
-                            menuTrainPet(id);
+                            menuTrainPet(id, in);
                         break;
                     case "5":
                         flag = false;
                         break;
                     default:
                         System.out.println("такого варианта нет");
+                        break;
                 }
             }
         }
@@ -89,6 +90,7 @@ public class ConsoleMenu {
         System.out.println("\nВведите номер животного, 0 для возврата в основное меню: ");
         while (true) {
             int id = in.nextInt();
+            in.nextLine();
             if (id < 0 || id > petController.getAllPet().size()) {
                 System.out.println("Животного с таким номером нет, попробуйте еще раз:");
             } else
@@ -97,21 +99,20 @@ public class ConsoleMenu {
         }
     }
 
-    private void menuTrainPet(int petId) { // , Scanner in) {
-        try (Scanner sc = new Scanner(System.in, "ibm866")) {
-            while (true) {
-                System.out.print("Введите новую команду, 0 для возврата в основное меню: ");
-                String command = sc.nextLine();
-                if (command.length() == 1 && command.equals("0"))
-                    return;
-                try {
-                    if (petController.trainPet(petId, command))
-                        System.out.println("получилось!");
-                    else
-                        System.out.println("Это мы уже умеем!");
-                } catch (UncorrectDataException e) {
-                    System.out.println(e.getMessage());
-                }
+    private void menuTrainPet(int petId, Scanner in) {
+        Scanner sc = in;
+        while (true) {
+            System.out.println("Введите новую команду, 0 для возврата в основное меню: ");
+            String command = sc.nextLine();
+            if (command.length() == 1 && command.equals("0"))
+                return;
+            try {
+                if (petController.trainPet(petId, command))
+                    System.out.println("получилось!");
+                else
+                    System.out.println("Это мы уже умеем!");
+            } catch (UncorrectDataException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
