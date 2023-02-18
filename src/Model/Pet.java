@@ -42,10 +42,7 @@ public abstract class Pet {
     }
 
     public void train (String command){
-        // if (! getPossibleCommands().contains(command))
-        //     throw new UncorrectDataException("невыполнимая команда");
-        // else 
-            commands.add(command);
+        commands.add(command);
     }
 
     public abstract List <String> getPossibleCommands ();

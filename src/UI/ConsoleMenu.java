@@ -27,7 +27,7 @@ public class ConsoleMenu {
                 String key = in.next();
                 switch (key) {
                     case "1":
-                        System.out.println("Ферма:");
+                        System.out.println("\n          Наши питомцы:");
                         petController.showFarm();
                         break;
                     case "2":
