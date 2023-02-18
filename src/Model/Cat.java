@@ -17,7 +17,7 @@ public class Cat extends Pet{
     }
 
     @Override
-    protected List<String> getPossibleCommands() {
+    public List<String> getPossibleCommands() {
         return possibleCommands;
     }
 }

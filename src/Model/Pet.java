@@ -5,8 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import Exceptions.UncorrectDataException;
-
 public abstract class Pet {
     
     private String name;
@@ -43,6 +41,12 @@ public abstract class Pet {
         return commands;
     }
 
+    public void train (String command){
+        commands.add(command);
+    }
+
+    public abstract List <String> getPossibleCommands ();
+
     public String commandsToString (){
         StringBuilder sb = new StringBuilder();
         if (commands.size() != 0){
@@ -53,13 +57,6 @@ public abstract class Pet {
             }
         }
         return sb.toString();
-    }
-
-    public void train (String command){
-        if (! getPossibleCommands().contains(command))
-            throw new UncorrectDataException("невыполнимая команда");
-        else 
-            commands.add(command);
     }
 
     @Override
@@ -76,6 +73,4 @@ public abstract class Pet {
         sb.deleteCharAt(sb.length()-1);
         return sb.toString();
     }
-
-    protected abstract List <String> getPossibleCommands ();
 }
