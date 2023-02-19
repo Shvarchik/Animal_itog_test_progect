@@ -27,6 +27,10 @@ public abstract class Pet {
         this.name = name;
     }
 
+    public void setBirthday(LocalDate date) {
+        this.birthday = date;
+    }
+
     public void setBirthday(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         this.birthday = LocalDate.parse(date, formatter);
@@ -63,7 +67,7 @@ public abstract class Pet {
     public String toString() {
         
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("имя: %s, дата рождения: %s", name, getBirthday()));
+        sb.append(String.format("имя: %s, дата рождения: %s ", name, getBirthday()));
         if (commands.size() != 0){
             sb.append (", команды: ");
             for (String command : commands) {

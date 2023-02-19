@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import Model.*;
 
-import Model.Pet;
 
 public class PetRepository implements IRepository<Pet> {
 
@@ -20,11 +20,42 @@ public class PetRepository implements IRepository<Pet> {
     private List<Pet> farm;
 
     public PetRepository() {
-        farm = new ArrayList<Pet>();
     };
 
     @Override
     public List<Pet> GetAll() {
+        farm = new ArrayList<Pet>();
+        Pet pet;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            try (Connection dbConnection = getConnection()) {
+                sqlSt = dbConnection.createStatement();
+                resultSet = sqlSt.executeQuery("SELECT GenusId, PetName, Birthday FROM pet_list ORDER BY Id");
+                while (resultSet.next()) {
+
+                    int type = resultSet.getInt(1);
+                    String name = resultSet.getString(2);
+                    LocalDate birthday = resultSet.getDate(3).toLocalDate();
+                    switch (type){
+                        case 1:
+                            pet = new Cat(name,birthday);
+                            break;
+                        case 2:
+                            pet = new Dog(name, birthday);
+                            break;
+                        case 3:
+                            pet = new Hamster(name,birthday);
+                            break;
+                        default:
+                            pet = null;
+                    }
+                    farm.add(pet);
+                }
+            } 
+        } catch (ClassNotFoundException | IOException | SQLException ex) {
+            Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        } 
         return farm;
     }
 
