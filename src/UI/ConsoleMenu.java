@@ -3,6 +3,7 @@ package UI;
 import java.util.Scanner;
 import Controller.*;
 import Exceptions.UncorrectDataException;
+import Model.PetType;
 
 public class ConsoleMenu {
 
@@ -14,13 +15,12 @@ public class ConsoleMenu {
 
     public void start() {
 
+        System.out.print("\033[H\033[J");    
         try (Scanner in = new Scanner(System.in, "ibm866"); Counter count = new Counter()) {
 
             boolean flag = true;
             int id;
             while (flag) {
-
-                // System.out.print("\033[H\033[J");
 
                 System.out.println(
                         "\n1 - Список всех животных\n2 - Завести новое животное\n3 - Что умеет животное\n4 - Дрессировка\n5 - Выход");
@@ -91,7 +91,7 @@ public class ConsoleMenu {
         while (true) {
             int id = in.nextInt();
             in.nextLine();
-            if (id < 0 || id > petController.getAllPet().size()) {
+            if (petController.getById(id) == null) {
                 System.out.println("Животного с таким номером нет, попробуйте еще раз:");
             } else
                 return id;

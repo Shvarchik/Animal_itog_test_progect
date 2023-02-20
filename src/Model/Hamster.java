@@ -9,8 +9,8 @@ public class Hamster extends Pet{
 
     private static List<String> possibleCommands = new ArrayList <String> (Arrays.asList("кушать","кувырок", "колесо", "дверка"));
 
-    public Hamster(String name, LocalDate birthday) {
-        super(name, birthday);
+    public Hamster(int id, String name, LocalDate birthday) {
+        super(id, name, birthday);
     }
 
     public Hamster() {

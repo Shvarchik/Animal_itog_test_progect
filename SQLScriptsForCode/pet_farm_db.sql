@@ -25,7 +25,9 @@ VALUES ('кс-кс'), ('дай лапу'), ('сидеть'), ('лежать'),
 CREATE TABLE Genus_command
 (
 	GenusId INT , 
-	CommandId INT
+	CommandId INT,
+    Foreign KEY (Genusid) REFERENCES pet_types (Id),
+    Foreign KEY (CommandId) REFERENCES commands (Id)
 );
 
 INSERT INTO Genus_command (GenusId, CommandId)
@@ -55,12 +57,12 @@ VALUES ('Барсик', '2015-01-01', 1),
 ('Черныш', '2021-07-11', 3), 
 ('Снежинка', '2021-05-10', 3);
 
-DROP TABLE petType_command;
-
 CREATE TABLE pet_command
 (
 	PetId INT , 
-	CommandId INT
+	CommandId INT,
+    Foreign KEY (PetId) REFERENCES pet_list (Id) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign KEY (CommandId) REFERENCES commands (Id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO pet_command (PetId, CommandId)
@@ -68,10 +70,6 @@ VALUES (1, 1),
 (2, 1), (2, 2), (3, 4), (3, 5),
 (4, 2), (4, 9), (5, 2), (5, 6), (6, 2), (6, 3), (7, 2), (7, 8),
 (8, 10), (9, 10), (10, 10), (10, 13);
-
-
-
-
 
 
 
