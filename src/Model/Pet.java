@@ -2,29 +2,41 @@
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Pet {
     
+    protected int petId;
     private String name;
     private LocalDate birthday;
-    private ArrayList<String> commands;
-
-    {
-        commands = new ArrayList<String>();
-    }
-
+    
     public Pet() {
     }
 
-    protected Pet (String name, LocalDate birthday){
+    protected Pet (int id, String name, LocalDate birthday){
+        this.petId = id;
         this.name = name;
         this.birthday = birthday;
     }
 
+    public void setPetId(int petId) {
+        this.petId = petId;
+    }
+
+    public int getPetId() {
+        return petId;
+    }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setBirthday(LocalDate date) {
+        this.birthday = date;
     }
 
     public void setBirthday(String date) {
@@ -32,45 +44,19 @@ public abstract class Pet {
         this.birthday = LocalDate.parse(date, formatter);
     }
 
+    public LocalDate getBirthdayDate(){
+        return birthday;
+    }
+
     public String getBirthday() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return formatter.format(birthday);
     }
 
-    public ArrayList<String> getCommands() {
-        return commands;
-    }
-
-    public void train (String command){
-        commands.add(command);
-    }
-
     public abstract List <String> getPossibleCommands ();
-
-    public String commandsToString (){
-        StringBuilder sb = new StringBuilder();
-        if (commands.size() != 0){
-            sb.append ("команды:\n");
-            for (String command : commands) {
-                sb.append(command);
-                sb.append ("\n");
-            }
-        }
-        return sb.toString();
-    }
 
     @Override
     public String toString() {
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("имя: %s, дата рождения: %s", name, getBirthday()));
-        if (commands.size() != 0){
-            sb.append (", команды: ");
-            for (String command : commands) {
-                sb.append(String.format(" %s,",command));
-            }
-        }
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
+        return String.format("%d. %s: имя: %s, дата рождения: %s ", getPetId(), getClass().getSimpleName(), name, getBirthday());
     }
 }

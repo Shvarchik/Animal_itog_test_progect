@@ -9,8 +9,8 @@ public class Dog extends Pet {
 
     private static List<String> possibleCommands = new ArrayList <String >(Arrays.asList("лежать","сидеть","ко мне","дай лапу","фу","фас", "служи", "голос"));
 
-    public Dog(String name, LocalDate birthday) {
-        super(name, birthday);
+    public Dog(int id, String name, LocalDate birthday) {
+        super(id, name, birthday);
     }
 
     public Dog() {

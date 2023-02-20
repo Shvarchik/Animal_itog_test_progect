@@ -11,6 +11,4 @@ public class App {
         PetController controller = new PetController(myFarm);
         new ConsoleMenu (controller).start();
     }
-}
-
-
+}    

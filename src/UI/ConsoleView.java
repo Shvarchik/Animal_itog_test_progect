@@ -26,14 +26,15 @@ public class ConsoleView implements View <Pet> {
 
     @Override
     public void printAll (List<Pet> petList){
-        int i = 1;
         for (Pet pet : petList) {
-            System.out.println(String.format("%d. %s: %s", i++, pet.getClass().getSimpleName(), pet.toString()));
+            System.out.println(String.format("%s", pet.toString()));
         }
     }
 
     @Override
-    public void print(String string) {
-        System.out.println(string);
+    public void print (List<String> strings) {
+        for (String string : strings) {
+            System.out.println(string);
+        }
     }
 }

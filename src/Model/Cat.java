@@ -7,10 +7,10 @@ import java.util.List;
 
 public class Cat extends Pet{
 
-    private static List<String> possibleCommands = new ArrayList <String >(Arrays.asList("кc-кc","сидеть","ко мне","дай лапку","принеси"));
+    private static List<String> possibleCommands = new ArrayList <String >(Arrays.asList("кc-кc","сидеть","ко мне","дай лапу","принеси"));
 
-    public Cat(String name, LocalDate birthday) {
-        super(name, birthday);
+    public Cat(int id, String name, LocalDate birthday) {
+        super(id, name, birthday);
     }
 
     public Cat() {

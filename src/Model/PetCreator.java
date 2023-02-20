@@ -1,6 +1,4 @@
-﻿package Controller;
-
-import Model.*;
+﻿package Model;
 
 public class PetCreator extends Creator {
 
