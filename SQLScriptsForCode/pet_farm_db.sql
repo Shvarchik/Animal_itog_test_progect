@@ -45,7 +45,8 @@ CREATE TABLE pet_list
     Foreign KEY (GenusId) REFERENCES pet_types (Id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO pet_list (PetName, Birthday, GenusId)
-VALUES ('Барсик', '2015-01-01', 1),
+VALUES 
+('Барсик', '2015-01-01', 1),
 ('Васька', '2016-01-01', 1),  
 ('Мурзик', '2017-01-01', 1), 
 ('Полкан', '2020-01-01', 2),
@@ -55,7 +56,7 @@ VALUES ('Барсик', '2015-01-01', 1),
 ('Рыжик', '2022-10-12', 3),
 ('Умка', '2022-03-12', 3),  
 ('Черныш', '2021-07-11', 3), 
-('Снежинка', '2021-05-10', 3);
+('Пушинка', '2021-05-10', 3);
 
 CREATE TABLE pet_command
 (

@@ -26,6 +26,8 @@ public class ConsoleView implements View <Pet> {
 
     @Override
     public void printAll (List<Pet> petList){
+        System.out.print("\033[H\033[J");
+        System.out.println("\n          Наши питомцы:");
         for (Pet pet : petList) {
             System.out.println(String.format("%s", pet.toString()));
         }
@@ -33,6 +35,8 @@ public class ConsoleView implements View <Pet> {
 
     @Override
     public void print (List<String> strings) {
+        if (strings.isEmpty())
+            System.out.println("список пуст");
         for (String string : strings) {
             System.out.println(string);
         }

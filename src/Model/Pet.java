@@ -2,23 +2,13 @@
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public abstract class Pet {
     
     protected int petId;
-    private String name;
-    private LocalDate birthday;
+    protected String name;
+    protected LocalDate birthday;
     
-    public Pet() {
-    }
-
-    protected Pet (int id, String name, LocalDate birthday){
-        this.petId = id;
-        this.name = name;
-        this.birthday = birthday;
-    }
-
     public void setPetId(int petId) {
         this.petId = petId;
     }
@@ -39,11 +29,6 @@ public abstract class Pet {
         this.birthday = date;
     }
 
-    public void setBirthday(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        this.birthday = LocalDate.parse(date, formatter);
-    }
-
     public LocalDate getBirthdayDate(){
         return birthday;
     }
@@ -52,8 +37,6 @@ public abstract class Pet {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return formatter.format(birthday);
     }
-
-    public abstract List <String> getPossibleCommands ();
 
     @Override
     public String toString() {

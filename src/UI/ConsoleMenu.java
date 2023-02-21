@@ -15,7 +15,7 @@ public class ConsoleMenu {
 
     public void start() {
 
-        System.out.print("\033[H\033[J");    
+        System.out.print("\033[H\033[J");
         try (Scanner in = new Scanner(System.in, "ibm866"); Counter count = new Counter()) {
 
             boolean flag = true;
@@ -23,11 +23,10 @@ public class ConsoleMenu {
             while (flag) {
 
                 System.out.println(
-                        "\n1 - Список всех животных\n2 - Завести новое животное\n3 - Что умеет животное\n4 - Дрессировка\n5 - Выход");
+                        "\n1 - Список всех животных\n2 - Завести новое животное\n3 - Изменить данные о животном\n4 - Что умеет животное\n5 - Дрессировка\n6 - Удалить запись\n0 - Выход");
                 String key = in.next();
                 switch (key) {
                     case "1":
-                        System.out.println("\n          Наши питомцы:");
                         petController.showFarm();
                         break;
                     case "2":
@@ -43,18 +42,34 @@ public class ConsoleMenu {
                         }
                         break;
                     case "3":
-                        petController.showFarm();
-                        id = menuChoicePet(in);
-                        if (id != 0)
-                            petController.getCommands(id);
+                        while (true) {
+                            id = menuChoicePet(in);
+                            if (id != 0)
+                                petController.updatePet(id);
+                            else
+                                break;
+                        }
                         break;
                     case "4":
-                        petController.showFarm();
+                        while (true) {
+                            id = menuChoicePet(in);
+                            if (id != 0)
+                                petController.getCommands(id);
+                            else
+                                break;
+                        }
+                        break;
+                    case "5":
                         id = menuChoicePet(in);
                         if (id != 0)
                             menuTrainPet(id, in);
                         break;
-                    case "5":
+                    case "6":
+                        id = menuChoicePet(in);
+                        if (id != 0)
+                            petController.delete(id);
+                        break;
+                    case "0":
                         flag = false;
                         break;
                     default:
@@ -66,7 +81,7 @@ public class ConsoleMenu {
     }
 
     private PetType menuChoice(Scanner in) {
-        System.out.println("Какое животное добавить:\n1 - Кошка\n2 - Собака\n3 - Хомяк\n4 - Возврат о основное меню");
+        System.out.println("Какое животное добавить:\n1 - Кошка\n2 - Собака\n3 - Хомяк\n0 - Возврат в основное меню");
 
         while (true) {
             String key = in.next();
@@ -77,10 +92,10 @@ public class ConsoleMenu {
                     return PetType.Dog;
                 case "3":
                     return PetType.Hamster;
-                case "4":
+                case "0":
                     return null;
                 default:
-                    System.out.println("Такого варианта нет, введите число от 1 до 4");
+                    System.out.println("Такого варианта нет, введите число от 0 до 3");
                     break;
             }
         }
@@ -91,6 +106,8 @@ public class ConsoleMenu {
         while (true) {
             int id = in.nextInt();
             in.nextLine();
+            if (id == 0)
+                return id;
             if (petController.getById(id) == null) {
                 System.out.println("Животного с таким номером нет, попробуйте еще раз:");
             } else

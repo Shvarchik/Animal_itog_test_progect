@@ -28,20 +28,34 @@ public class PetController {
         if (validator.validate(data)){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             LocalDate birthday = LocalDate.parse(data[1], formatter);
-            petRepository.Create(petCreator.createPet(type, data[0], birthday));    
+            petRepository.create(petCreator.createPet(type, data[0], birthday));    
         }
     }
 
+    public void updatePet (int id){
+
+        Pet pet = getById(id);
+        String [] data = new String []{view.getName(), view.getBirthday()};
+
+        if (validator.validate(data)){
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate birthday = LocalDate.parse(data[1], formatter);
+            pet.setName(data[0]);
+            pet.setBirthday(birthday);
+            petRepository.update(pet);
+        }    
+    }
+
     public List <Pet> getAllPet (){
-        return petRepository.GetAll();
+        return petRepository.getAll();
     }
 
     public boolean trainPet (int id, String command){
         
-        Pet pet = petRepository.GetById(id);
-        if (((PetRepository)petRepository).getCommandsById(id).contains(command))
+        if (((PetRepository)petRepository).getCommandsById(id,1).contains(command))
             return false;
-        if (! pet.getPossibleCommands().contains(command))
+        if (! ((PetRepository)petRepository).getCommandsById(id,2).contains(command))
             throw new UncorrectDataException("невыполнимая команда");
         else {
             ((PetRepository)petRepository).train (id,command);
@@ -50,11 +64,15 @@ public class PetController {
     }
 
     public Pet getById (int id){
-        return petRepository.GetById(id);
+        return petRepository.getById(id);
+    }
+
+    public void delete (int id){
+        petRepository.delete(id);
     }
 
     public  void getCommands (int id){
-        view.print(((PetRepository)petRepository).getCommandsById(id));
+        view.print(((PetRepository)petRepository).getCommandsById(id,1));
     }
 
     public void showFarm (){

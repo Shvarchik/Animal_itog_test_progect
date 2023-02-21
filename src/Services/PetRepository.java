@@ -17,13 +17,14 @@ public class PetRepository implements IRepository<Pet> {
     private Creator petCreator;
     private Statement sqlSt;
     private ResultSet resultSet;
+    private String SQLstr;
     
     public PetRepository() {
         this.petCreator = new PetCreator();
     };
 
     @Override
-    public List<Pet> GetAll() {
+    public List<Pet> getAll() {
         List<Pet> farm = new ArrayList<Pet>();
         Pet pet;
         PetType type = null;
@@ -31,7 +32,8 @@ public class PetRepository implements IRepository<Pet> {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
                 sqlSt = dbConnection.createStatement();
-                resultSet = sqlSt.executeQuery("SELECT GenusId, Id, PetName, Birthday FROM pet_list ORDER BY Id");
+                SQLstr = "SELECT GenusId, Id, PetName, Birthday FROM pet_list ORDER BY Id";
+                resultSet = sqlSt.executeQuery(SQLstr);
                 while (resultSet.next()) {
 
                     int petType = resultSet.getInt(1);
@@ -62,14 +64,14 @@ public class PetRepository implements IRepository<Pet> {
     }
 
     @Override
-    public Pet GetById(int petId) {
+    public Pet getById(int petId) {
         Pet pet = null;
         PetType type = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
 
-                String SQLstr = "SELECT GenusId, Id, PetName, Birthday FROM pet_list WHERE Id = ?";
+                SQLstr = "SELECT GenusId, Id, PetName, Birthday FROM pet_list WHERE Id = ?";
                 PreparedStatement prepSt = dbConnection.prepareStatement(SQLstr);
                 prepSt.setInt(1, petId);
                 resultSet = prepSt.executeQuery();
@@ -103,11 +105,11 @@ public class PetRepository implements IRepository<Pet> {
     }
 
     @Override
-    public void Create(Pet pet) {
+    public void create(Pet pet) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
-                String SQLstr = "INSERT INTO pet_list (PetName, Birthday, GenusId) SELECT ?, ?, (SELECT Id FROM pet_types WHERE Genus_name = ?)";
+                SQLstr = "INSERT INTO pet_list (PetName, Birthday, GenusId) SELECT ?, ?, (SELECT Id FROM pet_types WHERE Genus_name = ?)";
                 PreparedStatement prepSt = dbConnection.prepareStatement(SQLstr);
                 prepSt.setString(1, pet.getName());
                 prepSt.setDate(2, Date.valueOf(pet.getBirthdayDate())); 
@@ -140,13 +142,19 @@ public class PetRepository implements IRepository<Pet> {
         } 
     }
 
-    public List<String> getCommandsById (int petId){
+    public List<String> getCommandsById (int petId, int commands_type){   
+        
+        // commands type = 1  - получить команды, выполняемые питомцем, 2 - команды, выполнимые животным того рода, к которому относится питомец
 
         List <String> commands = new ArrayList<>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
-                String SQLstr = "SELECT Command_name FROM pet_command pc JOIN commands c ON pc.CommandId = c.Id WHERE pc.PetId = ?";
+                if (commands_type == 1){
+                    SQLstr = "SELECT Command_name FROM pet_command pc JOIN commands c ON pc.CommandId = c.Id WHERE pc.PetId = ?";
+                } else {
+                    SQLstr = "SELECT Command_name FROM commands c JOIN Genus_command gc ON c.Id = gc.CommandId WHERE gc.GenusId = (SELECT GenusId FROM pet_list WHERE Id = ?)";
+                }
                 PreparedStatement prepSt = dbConnection.prepareStatement(SQLstr);
                 prepSt.setInt(1, petId);
                 resultSet = prepSt.executeQuery();
@@ -162,11 +170,41 @@ public class PetRepository implements IRepository<Pet> {
     }
 
     @Override
-    public void Update(Pet pet) {
+    public void update(Pet pet) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            try (Connection dbConnection = getConnection()) {
+                SQLstr = "UPDATE pet_list SET PetName = ?, Birthday = ? WHERE Id = ?";
+                PreparedStatement prepSt = dbConnection.prepareStatement(SQLstr);
+
+                prepSt.setString(1, pet.getName());
+                prepSt.setDate(2, Date.valueOf(pet.getBirthdayDate())); 
+                prepSt.setInt(3,pet.getPetId());
+                
+                int rows = prepSt.executeUpdate();
+                System.out.printf("%d запись изменена \n", rows);
+            }
+        } catch (ClassNotFoundException | IOException | SQLException ex) {
+            Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        } 
     }
 
     @Override
-    public void Remove(int id) {
+    public void delete (int id) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            try (Connection dbConnection = getConnection()) {
+                SQLstr = "DELETE FROM pet_list WHERE Id = ?";
+                PreparedStatement prepSt = dbConnection.prepareStatement(SQLstr);
+                prepSt.setInt(1,id);
+                int rows = prepSt.executeUpdate();
+                System.out.printf("%d запись удалена \n", rows);
+            }
+        } catch (ClassNotFoundException | IOException | SQLException ex) {
+            Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        } 
     }
 
     public static Connection getConnection() throws SQLException, IOException {
