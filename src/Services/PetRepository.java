@@ -27,7 +27,6 @@ public class PetRepository implements IRepository<Pet> {
     public List<Pet> getAll() {
         List<Pet> farm = new ArrayList<Pet>();
         Pet pet;
-        PetType type = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
@@ -36,21 +35,11 @@ public class PetRepository implements IRepository<Pet> {
                 resultSet = sqlSt.executeQuery(SQLstr);
                 while (resultSet.next()) {
 
-                    int petType = resultSet.getInt(1);
+                    PetType type = PetType.getType(resultSet.getInt(1));
                     int id = resultSet.getInt(2);
                     String name = resultSet.getString(3);
                     LocalDate birthday = resultSet.getDate(4).toLocalDate();
-                    switch (petType){
-                        case 1:
-                            type = PetType.Cat;
-                            break;
-                        case 2:
-                            type = PetType.Dog;
-                            break;
-                        case 3:
-                            type = PetType.Hamster;
-                            break;
-                    }
+                    
                     pet = petCreator.createPet(type, name, birthday);
                     pet.setPetId(id);
                     farm.add(pet);
@@ -66,7 +55,6 @@ public class PetRepository implements IRepository<Pet> {
     @Override
     public Pet getById(int petId) {
         Pet pet = null;
-        PetType type = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
@@ -78,21 +66,11 @@ public class PetRepository implements IRepository<Pet> {
 
                 if (resultSet.next()) {
 
-                    int typeNum = resultSet.getInt(1);
+                    PetType type = PetType.getType(resultSet.getInt(1));
                     int id = resultSet.getInt(2);
                     String name = resultSet.getString(3);
                     LocalDate birthday = resultSet.getDate(4).toLocalDate();
-                    switch (typeNum){
-                        case 1:
-                            type = PetType.Cat;
-                            break;
-                        case 2:
-                            type = PetType.Dog;
-                            break;
-                        case 3:
-                            type = PetType.Hamster;
-                            break;
-                    }
+
                     pet = petCreator.createPet(type, name, birthday);
                     pet.setPetId(id);
                 } 
