@@ -25,20 +25,21 @@ public class ConsoleView implements View <Pet> {
     }
 
     @Override
-    public void printAll (List<Pet> petList){
+    public <T> void printAll (List <T> list, Class <T> clazz) {
         System.out.print("\033[H\033[J");
-        System.out.println("\n          Наши питомцы:");
-        for (Pet pet : petList) {
-            System.out.println(String.format("%s", pet.toString()));
+        if (list.isEmpty())
+            System.out.println("список пуст");
+        else {
+            if (clazz == Pet.class)
+                System.out.println("\n          Наши питомцы:");
+            for (T item : list) {
+                System.out.println(item);              
+            }
         }
     }
-
+    
     @Override
-    public void print (List<String> strings) {
-        if (strings.isEmpty())
-            System.out.println("список пуст");
-        for (String string : strings) {
-            System.out.println(string);
-        }
+    public void showMessage(String message) {
+        System.out.println(message);
     }
 }

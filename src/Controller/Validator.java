@@ -8,7 +8,7 @@ import Exceptions.*;
 
 public class Validator {
 
-    public boolean validate (String [] data){
+    public void validate (String [] data){
 
         StringBuilder sb = new StringBuilder();
         boolean flag = true;
@@ -29,7 +29,6 @@ public class Validator {
         if (flag == false){
             throw new UncorrectDataException(sb.toString());
         } 
-        return flag;
     }
 
     private boolean isValidName (String name){

@@ -44,12 +44,12 @@ public class PetRepository implements IRepository<Pet> {
                     pet.setPetId(id);
                     farm.add(pet);
                 }
+                return farm;
             } 
         } catch (ClassNotFoundException | IOException | SQLException ex) {
             Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
-        } 
-        return farm;
+            throw new RuntimeException(ex.getMessage());
+        }           
     }
 
     @Override
@@ -74,31 +74,33 @@ public class PetRepository implements IRepository<Pet> {
                     pet = petCreator.createPet(type, name, birthday);
                     pet.setPetId(id);
                 } 
+                return pet;
             } 
         } catch (ClassNotFoundException | IOException | SQLException ex) {
             Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         }
-        return pet; 
     }
 
     @Override
-    public void create(Pet pet) {
+    public int create(Pet pet) {
+        int rows;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
+
                 SQLstr = "INSERT INTO pet_list (PetName, Birthday, GenusId) SELECT ?, ?, (SELECT Id FROM pet_types WHERE Genus_name = ?)";
                 PreparedStatement prepSt = dbConnection.prepareStatement(SQLstr);
                 prepSt.setString(1, pet.getName());
                 prepSt.setDate(2, Date.valueOf(pet.getBirthdayDate())); 
                 prepSt.setString(3, pet.getClass().getSimpleName());
 
-                int rows = prepSt.executeUpdate();
-                System.out.printf("%d запись добавлена \n", rows);
+                rows = prepSt.executeUpdate();
+                return rows;
             }
         } catch (ClassNotFoundException | IOException | SQLException ex) {
             Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         } 
     }
 
@@ -111,12 +113,11 @@ public class PetRepository implements IRepository<Pet> {
                 prepSt.setInt(1, id);
                 prepSt.setString(2, command);
 
-                int rows = prepSt.executeUpdate();
-                System.out.printf("%d команда разучена\n", rows);
+                prepSt.executeUpdate();
             }
         } catch (ClassNotFoundException | IOException | SQLException ex) {
             Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         } 
     }
 
@@ -124,7 +125,7 @@ public class PetRepository implements IRepository<Pet> {
         
         // commands type = 1  - получить команды, выполняемые питомцем, 2 - команды, выполнимые животным того рода, к которому относится питомец
 
-        List <String> commands = new ArrayList<>();
+        List <String> commands = new ArrayList <>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
@@ -139,16 +140,17 @@ public class PetRepository implements IRepository<Pet> {
                 while (resultSet.next()) {
                     commands.add(resultSet.getString(1));
                 }
+                return commands;
             }
         } catch (ClassNotFoundException | IOException | SQLException ex) {
             Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         } 
-        return commands;
     }
 
     @Override
-    public void update(Pet pet) {
+    public int update(Pet pet) {
+        int rows;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection dbConnection = getConnection()) {
@@ -159,12 +161,12 @@ public class PetRepository implements IRepository<Pet> {
                 prepSt.setDate(2, Date.valueOf(pet.getBirthdayDate())); 
                 prepSt.setInt(3,pet.getPetId());
                 
-                int rows = prepSt.executeUpdate();
-                System.out.printf("%d запись изменена \n", rows);
+                rows = prepSt.executeUpdate();
+                return rows;
             }
         } catch (ClassNotFoundException | IOException | SQLException ex) {
             Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         } 
     }
 
@@ -176,12 +178,11 @@ public class PetRepository implements IRepository<Pet> {
                 SQLstr = "DELETE FROM pet_list WHERE Id = ?";
                 PreparedStatement prepSt = dbConnection.prepareStatement(SQLstr);
                 prepSt.setInt(1,id);
-                int rows = prepSt.executeUpdate();
-                System.out.printf("%d запись удалена \n", rows);
+                prepSt.executeUpdate();
             }
         } catch (ClassNotFoundException | IOException | SQLException ex) {
             Logger.getLogger(PetRepository.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         } 
     }
 

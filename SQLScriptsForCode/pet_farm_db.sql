@@ -72,5 +72,6 @@ VALUES (1, 1),
 (4, 2), (4, 9), (5, 2), (5, 6), (6, 2), (6, 3), (7, 2), (7, 8),
 (8, 10), (9, 10), (10, 10), (10, 13);
 
-
+SHOW VARIABLES LIKE "sql_safe_updates";
+SET SQL_SAFE_UPDATES = 1;
 

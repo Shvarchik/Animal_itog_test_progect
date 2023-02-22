@@ -27,7 +27,7 @@ public class ConsoleMenu {
                 String key = in.next();
                 switch (key) {
                     case "1":
-                        petController.showFarm();
+                        petController.getAllPet();
                         break;
                     case "2":
                         PetType type = menuChoice(in);
@@ -45,7 +45,11 @@ public class ConsoleMenu {
                         while (true) {
                             id = menuChoicePet(in);
                             if (id != 0)
-                                petController.updatePet(id);
+                                try {
+                                    petController.updatePet(id);
+                                } catch (UncorrectDataException e) {
+                                    System.out.println(e.getMessage());
+                                }
                             else
                                 break;
                         }
@@ -109,7 +113,7 @@ public class ConsoleMenu {
             if (id == 0)
                 return id;
             if (petController.getById(id) == null) {
-                System.out.println("Животного с таким номером нет, попробуйте еще раз:");
+                System.out.println("Животного с таким номером нет, попробуйте еще раз, 0 для возврата в основное меню:");
             } else
                 return id;
 
@@ -123,14 +127,8 @@ public class ConsoleMenu {
             String command = sc.nextLine();
             if (command.length() == 1 && command.equals("0"))
                 return;
-            try {
-                if (petController.trainPet(petId, command))
-                    System.out.println("получилось!");
-                else
-                    System.out.println("Это мы уже умеем!");
-            } catch (UncorrectDataException e) {
-                System.out.println(e.getMessage());
-            }
+            if (petController.trainPet(petId, command))
+                System.out.println("получилось!");
         }
     }
 }

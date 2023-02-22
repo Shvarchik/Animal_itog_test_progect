@@ -14,8 +14,9 @@ INSERT INTO pet_list (PetName, Birthday, GenusId)
 SELECT 'Полкан', '2018-04-05', (SELECT Id FROM pet_types WHERE Genus_name = "Dog");
 
 -- Train
+
 INSERT INTO pet_command (PetId, CommandId)
-SELECT 2, (SELECT Id FROM commands WHERE Command_name = "лежать");
+SELECT 2, (SELECT Id FROM commands WHERE Command_name = 'кс-кс');
 
 -- get possible commanhds by petId
 
@@ -31,4 +32,7 @@ DELETE FROM pet_list WHERE Id = 5;
 -- update
 
 -- UPDATE pet_list SET PetName = ?, Birthday = ? WHERE Id = ? 
+
+
+
 

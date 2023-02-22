@@ -6,7 +6,7 @@ public interface IRepository <T> {
   
         List <T> getAll();
         T getById(int id);
-        void create(T item);
-        void update(T item);  
+        int create(T item);
+        int update(T item);  
         void delete (int item);  
 }

@@ -2,11 +2,11 @@
 
 import java.util.List;
 
-public interface View <T> {
+public interface View <T>{
     
     String getName();
     String getBirthday();
-    void print (List <String> string);
-    void printAll (List <T> list);
+    <U> void printAll (List <U> list, Class <U> clazz);
+    void showMessage (String s);
 
 }
